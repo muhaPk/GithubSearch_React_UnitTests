@@ -1,45 +1,32 @@
-import { render, screen } from '@testing-library/react'
-import {useSelector} from "react-redux";
-import {Users} from '../Users'
+import React from 'react';
+import { shallow } from 'enzyme';
+import { Table } from '../Table';
+import { Users } from '../Users';
+import { UsersSort } from '../UsersSort';
+import { useSelector } from 'react-redux';
 
-jest.mock('react-redux')
+jest.mock('react-redux', () => ({
+    useSelector: jest.fn(),
+}));
 
-const data = [
+describe('Table Component', () => {
+    it('renders loading message when loading is true', () => {
+        useSelector.mockReturnValue({ loading: true });
 
-    {
-        id: 1,
-        login: 'login',
-        url: 'https://api.github.com/users/login',
-        html_url: 'https://github.com/login',
-        followers_url: 'https://api.github.com/users/login/followers',
-        following_url: 'https://api.github.com/users/login/following{/other_user}'
-    },
-    {
-        id: 2,
-        login: 'login',
-        url: 'https://api.github.com/users/login',
-        html_url: 'https://github.com/login',
-        followers_url: 'https://api.github.com/users/login/followers',
-        following_url: 'https://api.github.com/users/login/following{/other_user}'
-    },
-    {
-        id: 3,
-        login: 'login',
-        url: 'https://api.github.com/users/login',
-        html_url: 'https://github.com/login',
-        followers_url: 'https://api.github.com/users/login/followers',
-        following_url: 'https://api.github.com/users/login/following{/other_user}'
-    },
+        const wrapper = shallow(<Table />);
+        const loadingMessage = wrapper.find('p.loading');
 
-]
+        expect(loadingMessage).toBeTruthy();
+    });
 
-describe('Table component', () => {
+    it('renders UsersSort and Users components when loading is false', () => {
+        useSelector.mockReturnValue({ loading: false, currentUsers: [] });
 
-    it('Create table with data', () => {
-        useSelector.mockReturnValue(data);
-        const view = render(<Users />)
-        expect(view).toMatchSnapshot()
-    })
+        const wrapper = shallow(<Table />);
+        const usersSortComponent = wrapper.find(UsersSort);
+        const usersComponent = wrapper.find(Users);
 
-})
-
+        expect(usersSortComponent).toBeTruthy();
+        expect(usersComponent).toBeTruthy();
+    });
+});

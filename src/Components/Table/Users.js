@@ -4,7 +4,6 @@ import style from "./users.module.scss";
 import Popup from 'reactjs-popup';
 
 export const Users = ({ data }) => {
-
     return (
         <>
         {
@@ -24,7 +23,4 @@ export const Users = ({ data }) => {
         }
         </>
     )
-
-
-
 }

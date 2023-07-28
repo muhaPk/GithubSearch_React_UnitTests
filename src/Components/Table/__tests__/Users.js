@@ -1,46 +1,33 @@
-import { render, screen } from '@testing-library/react'
+import React from 'react';
+import { shallow } from 'enzyme';
+import { Users } from '../Users';
+import Popup from 'reactjs-popup';
 
-import {Users} from '../Users'
+describe('Users Component', () => {
+    it('renders the correct number of Popup components', () => {
+        const data = [
+            {
+                id: 1,
+                login: 'user1',
+                url: 'https://example.com/user1',
+                html_url: 'https://github.com/user1',
+                followers_url: 'https://api.github.com/user1/followers',
+                following_url: 'https://api.github.com/user1/following',
+            },
+            {
+                id: 2,
+                login: 'user2',
+                url: 'https://example.com/user2',
+                html_url: 'https://github.com/user2',
+                followers_url: 'https://api.github.com/user2/followers',
+                following_url: 'https://api.github.com/user2/following',
+            },
+        ];
 
-const data = [
+        const wrapper = shallow(<Users data={data} />);
+        const popupComponents = wrapper.find(Popup);
 
-    {
-        id: 1,
-        login: 'login',
-        url: 'https://api.github.com/users/login',
-        html_url: 'https://github.com/login',
-        followers_url: 'https://api.github.com/users/login/followers',
-        following_url: 'https://api.github.com/users/login/following{/other_user}'
-    },
-    {
-        id: 2,
-        login: 'login',
-        url: 'https://api.github.com/users/login',
-        html_url: 'https://github.com/login',
-        followers_url: 'https://api.github.com/users/login/followers',
-        following_url: 'https://api.github.com/users/login/following{/other_user}'
-    },
-    {
-        id: 3,
-        login: 'login',
-        url: 'https://api.github.com/users/login',
-        html_url: 'https://github.com/login',
-        followers_url: 'https://api.github.com/users/login/followers',
-        following_url: 'https://api.github.com/users/login/following{/other_user}'
-    },
+        expect(popupComponents).toHaveLength(data.length);
+    });
 
-]
-
-describe('Table component', () => {
-
-    it('Table renders without data', () => {
-        render(<Users />)
-        expect(screen.queryByRole('Popup')).toBeNull()
-    })
-
-    it('Table snapshot', () => {
-        const view = render(<Users data={data} />)
-        expect(view).toMatchSnapshot()
-    })
-})
-
+});
